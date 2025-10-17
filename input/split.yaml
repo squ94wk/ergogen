@@ -1,0 +1,71 @@
+meta:
+  engine: "4.0.0"
+
+units:
+  # Proxy spacing vars (MX: use u/u; Choc: cx/cy)
+  kx: cx
+  ky: cy
+
+points:
+  zones:
+    matrix:
+      # Left half (source) matrix: pinky, ring, middle, index. No inner column.
+      anchor:
+      key:
+        padding: 1 ky
+        spread: 1 kx
+      rows:
+        bottom: {}
+        home: {}
+        top: {}
+      columns:
+        pinky:
+          # Pinky: drop the top row entirely; keep HOME only on the LEFT; keep BOTTOM on BOTH sides
+          rows:
+            top:
+              skip: true         # remove top row (both sides)
+            home: {}       # left only (won't be mirrored to right)
+            bottom:
+              asym: source
+          key:
+            splay: 5
+        ring:
+          key:
+            splay: -4
+            spread: 1.1 kx
+            stagger: 0.5 ky
+        middle:
+          key:
+            splay: -2
+            spread: 1.05 kx
+            stagger: 0.2 ky
+        index:
+          key:
+            splay: -1
+            spread: 1.04 kx
+            stagger: -0.1 ky
+
+    thumbs:
+      # Two-thumb keys per side (2 columns x 1 row), mirrored later
+      anchor:
+        ref: matrix_index_bottom
+        shift: [1.1 kx, -1 ky]  # move under index; tweak to taste
+      key:
+        padding: 1 ky
+        spread: 1 kx
+      rows:
+        thumb: {}
+      columns:
+        near:
+          key:
+            splay: -10
+        far:
+          key:
+            shift: [0.1 kx, -0.05 kx]
+            splay: -5
+
+  # Mirror both zones to form the right half
+  mirror:
+    # Mirror around a virtual axis defined by this ref point and distance
+    ref: matrix_index_home
+    distance: 160  # split width; adjust for your preferred pinky-to-pinky spacing
