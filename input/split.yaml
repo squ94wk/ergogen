@@ -3,14 +3,17 @@ meta:
 
 units:
   # Proxy spacing vars (MX: use u/u; Choc: cx/cy)
-  kx: cx
-  ky: cy
+  kx: cx # 18
+  ky: cy # 17
+  px: kx + 2
+  py: ky + 2
+  cutout: 13.8
+  cutout_offset: cutout / 2
 
 points:
   zones:
     matrix:
-      # Left half (source) matrix: pinky, ring, middle, index. No inner column.
-      anchor:
+      anchor: {}
       key:
         padding: 1 ky
         spread: 1 kx
@@ -20,52 +23,138 @@ points:
         top: {}
       columns:
         pinky:
-          # Pinky: drop the top row entirely; keep HOME only on the LEFT; keep BOTTOM on BOTH sides
           rows:
             top:
-              skip: true         # remove top row (both sides)
-            home: {}       # left only (won't be mirrored to right)
+              skip: true
+            home: {}
             bottom:
               asym: source
           key:
             splay: 5
         ring:
+          rows: {}
           key:
             splay: -4
             spread: 1.1 kx
             stagger: 0.5 ky
         middle:
+          rows: {}
           key:
             splay: -2
             spread: 1.05 kx
             stagger: 0.2 ky
         index:
+          rows: {}
           key:
             splay: -1
             spread: 1.04 kx
             stagger: -0.1 ky
+        thumb:
+          rows:
+            bottom: {}
+            home: {}
+            top:
+              skip: true
+          key:
+            splay: -100
+            spread: 0.75 kx
+            stagger: -1.2 ky
 
-    thumbs:
-      # Two-thumb keys per side (2 columns x 1 row), mirrored later
+    board:
       anchor:
-        ref: matrix_index_bottom
-        shift: [1.1 kx, -1 ky]  # move under index; tweak to taste
+        ref: matrix_index_home
+        shift: [1.1 kx, -1.5 ky]
       key:
         padding: 1 ky
         spread: 1 kx
       rows:
-        thumb: {}
+        mcu: {}
+        trrs: {}
       columns:
-        near:
-          key:
-            splay: -10
-        far:
-          key:
-            shift: [0.1 kx, -0.05 kx]
-            splay: -5
+        component:
+          rows:
+            mcu:
+              shift: [0, 0.5 ky]
+            trrs:
+              shift: [0, -0.5 ky]
 
-  # Mirror both zones to form the right half
   mirror:
-    # Mirror around a virtual axis defined by this ref point and distance
     ref: matrix_index_home
-    distance: 160  # split width; adjust for your preferred pinky-to-pinky spacing
+    distance: 120
+
+outlines:
+  keys:
+    - what: rectangle
+      where: "-/board/"
+      joints: 1
+      size: [kx - 0.5, ky - 0.5]
+
+  board:
+    - what: rectangle
+      where: "/board/"
+      size: [18, 20]
+
+  _hull_left:
+    - &hull_left_poly
+      what: polygon
+      points:
+        - ref: matrix_pinky_bottom
+          shift: [-cutout_offset, -cutout_offset]
+        - ref: matrix_pinky_bottom
+          shift: [cutout_offset, -cutout_offset]
+        - ref: matrix_thumb_bottom
+          shift: [cutout_offset, -cutout_offset]
+        - ref: matrix_thumb_home
+          shift: [cutout_offset, cutout_offset]
+        - ref: matrix_thumb_home
+          shift: [-cutout_offset, cutout_offset]
+        - ref: matrix_thumb_bottom
+          shift: [-cutout_offset, -cutout_offset - 1]
+        - ref: matrix_index_top
+          shift: [cutout_offset, cutout_offset]
+        - ref: matrix_middle_top
+          shift: [cutout_offset, cutout_offset]
+        - ref: matrix_middle_top
+          shift: [-cutout_offset, cutout_offset]
+        - ref: matrix_ring_top
+          shift: [-cutout_offset, cutout_offset]
+        - ref: matrix_pinky_home
+          shift: [-cutout_offset, cutout_offset]
+
+  _hull_right:
+    - &hull_right_poly
+      what: polygon
+      points:
+        - ref: mirror_matrix_pinky_home
+          shift: [-cutout_offset, -cutout_offset]
+        - ref: mirror_matrix_ring_bottom
+          shift: [-cutout_offset, -cutout_offset]
+        - ref: mirror_matrix_thumb_bottom
+          shift: [cutout_offset, -cutout_offset]
+        - ref: mirror_matrix_thumb_home
+          shift: [cutout_offset, cutout_offset]
+        - ref: mirror_matrix_thumb_home
+          shift: [-cutout_offset, cutout_offset]
+        - ref: mirror_matrix_thumb_bottom
+          shift: [-cutout_offset, -cutout_offset - 1]
+        - ref: mirror_matrix_index_top
+          shift: [cutout_offset, cutout_offset]
+        - ref: mirror_matrix_middle_top
+          shift: [cutout_offset, cutout_offset]
+        - ref: mirror_matrix_middle_top
+          shift: [-cutout_offset, cutout_offset]
+        - ref: mirror_matrix_ring_top
+          shift: [-cutout_offset, cutout_offset]
+        - ref: mirror_matrix_pinky_home
+          shift: [-cutout_offset, cutout_offset]
+
+  top_plate:
+    - <<: *hull_left_poly
+    - <<: *hull_right_poly
+      expand: 4
+      fillet: 4
+    - operation: subtract
+      what: rectangle
+      where: "-/board/"
+      joints: 1
+      size: [cutout, cutout]
