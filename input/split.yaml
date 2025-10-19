@@ -63,24 +63,21 @@ points:
     board:
       anchor:
         ref: matrix_index_home
-        shift: [1.1 kx, -1.5 ky]
+        shift: [21, -0.8 ky]
       key:
         padding: 1 ky
         spread: 1 kx
       rows:
         mcu: {}
-        trrs: {}
       columns:
         component:
           rows:
             mcu:
               shift: [0, 0.5 ky]
-            trrs:
-              shift: [0, -0.5 ky]
 
   mirror:
     ref: matrix_index_home
-    distance: 120
+    distance: 90
 
 outlines:
   keys:
@@ -88,11 +85,6 @@ outlines:
       where: "-/board/"
       joints: 1
       size: [kx - 0.5, ky - 0.5]
-
-  board:
-    - what: rectangle
-      where: "/board/"
-      size: [18, 20]
 
   _hull_left:
     - &hull_left_poly
@@ -158,3 +150,19 @@ outlines:
       where: "-/board/"
       joints: 1
       size: [cutout, cutout]
+    - operation: add
+      what: rectangle
+      where: "/board/"
+      size: [18, 25 + 5]
+
+  pcb:
+    - <<: *hull_left_poly
+    - <<: *hull_right_poly
+    - operation: add
+      what: rectangle
+      where: "/board/"
+      size: [20, 25 + 5 + 12]
+      adjust:
+        shift: [-2, -8]
+      expand: 3
+      fillet: 3
