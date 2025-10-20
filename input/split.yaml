@@ -5,8 +5,8 @@ units:
   # Proxy spacing vars (MX: use u/u; Choc: cx/cy)
   kx: cx # 18
   ky: cy # 17
-  px: kx + 2
-  py: ky + 2
+  capx: cx - 0.5
+  capy: cy - 0.5
   cutout: 13.8
   cutout_offset: cutout / 2
 
@@ -30,25 +30,25 @@ points:
             bottom:
               asym: source
           key:
-            splay: 5
+            splay: 4
         ring:
           rows: {}
           key:
-            splay: -4
-            spread: 1.1 kx
-            stagger: 0.5 ky
+            splay: -2
+            spread: 1 kx + 1
+            stagger: 9
         middle:
           rows: {}
           key:
             splay: -2
-            spread: 1.05 kx
-            stagger: 0.2 ky
+            spread: 1 kx + 1
+            stagger: 3
         index:
           rows: {}
           key:
             splay: -1
-            spread: 1.04 kx
-            stagger: -0.1 ky
+            spread: kx + 1
+            stagger: -2
         thumb:
           rows:
             bottom: {}
@@ -63,28 +63,31 @@ points:
     board:
       anchor:
         ref: matrix_index_home
-        shift: [21, -0.8 ky]
+        shift: [23, -14]
       key:
         padding: 1 ky
         spread: 1 kx
       rows:
         mcu: {}
+        trrs: {}
       columns:
         component:
           rows:
             mcu:
               shift: [0, 0.5 ky]
+            trrs:
+              shift: [0, -1.2 ky]
 
   mirror:
     ref: matrix_index_home
-    distance: 90
+    distance: 100
 
 outlines:
   keys:
     - what: rectangle
       where: "-/board/"
       joints: 1
-      size: [kx - 0.5, ky - 0.5]
+      size: [capx, capy]
 
   _hull_left:
     - &hull_left_poly
@@ -140,29 +143,247 @@ outlines:
         - ref: mirror_matrix_pinky_home
           shift: [-cutout_offset, cutout_offset]
 
+  _holes:
+    - what: circle
+      where:
+        ref: matrix_pinky_home
+        shift: [-3, 12]
+      radius: 1
+    - what: circle
+      where:
+        ref: matrix_ring_top
+        shift: [-12, 2]
+      radius: 1
+    - what: circle
+      where:
+        ref: matrix_ring_bottom
+        shift: [-5, -17]
+      radius: 1
+    - what: circle
+      where:
+        ref: matrix_index_bottom
+        shift: [0, -25]
+      radius: 1
+    - what: circle
+      where:
+        ref: matrix_middle_top
+        shift: [10.5, 8]
+      radius: 1
+    - what: circle
+      where:
+        ref: matrix_thumb_bottom
+        shift: [-11.5, -4.5]
+      radius: 1
+    # right side
+    - what: circle
+      where:
+        ref: mirror_matrix_pinky_home
+        shift: [-3, 12]
+      radius: 1
+    - what: circle
+      where:
+        ref: mirror_matrix_pinky_home
+        shift: [6, -12]
+      radius: 1
+    - what: circle
+      where:
+        ref: mirror_matrix_ring_top
+        shift: [-12, 2]
+      radius: 1
+    - what: circle
+      where:
+        ref: mirror_matrix_ring_bottom
+        shift: [-5, -17]
+      radius: 1
+    - what: circle
+      where:
+        ref: mirror_matrix_index_bottom
+        shift: [0, -25]
+      radius: 1
+    - what: circle
+      where:
+        ref: mirror_matrix_middle_top
+        shift: [10.5, 8]
+      radius: 1
+    - what: circle
+      where:
+        ref: mirror_matrix_thumb_bottom
+        shift: [-11.5, -4.5]
+      radius: 1
+
+  _through_holes:
+    - name: _holes
+      expand: 0.5
+
+  _outer_holes:
+    - name: _holes
+
+  bottom_plate:
+    - <<: *hull_left_poly
+    - <<: *hull_right_poly
+    - &board_back_fill_left_poly
+      what: polygon
+      points:
+        - ref: matrix_index_top
+          shift: [cutout_offset, cutout_offset]
+        - ref: matrix_thumb_bottom
+          shift: [-cutout_offset, -cutout_offset - 1]
+        - ref: matrix_thumb_home
+          shift: [-cutout_offset, cutout_offset]
+        - ref: board_component_mcu
+          shift: [20/2, 25/2]
+    - &board_back_fill_right_poly
+      what: polygon
+      points:
+        - ref: mirror_matrix_index_top
+          shift: [cutout_offset, cutout_offset]
+        - ref: mirror_matrix_thumb_bottom
+          shift: [-cutout_offset, -cutout_offset - 1]
+        - ref: mirror_matrix_thumb_home
+          shift: [-cutout_offset, cutout_offset]
+        - ref: mirror_board_component_mcu
+          shift: [20/2, 25/2]
+      expand: 8
+    - operation: subtract
+      name: _outer_holes
+  #    - operation: subtract
+  #      what: rectangle
+  #      where: "-/board/"
+  #      joints: 1
+  #      size: [capx, capy]
+
+  pcb:
+    - <<: *hull_left_poly
+    - <<: *hull_right_poly
+    - <<: *board_back_fill_left_poly
+    - <<: *board_back_fill_right_poly
+      expand: 6
+      fillet: 6
+    - operation: subtract
+      name: _through_holes
+
   top_plate:
     - <<: *hull_left_poly
     - <<: *hull_right_poly
-      expand: 4
-      fillet: 4
+      expand: 6
+      fillet: 6
     - operation: subtract
       what: rectangle
       where: "-/board/"
       joints: 1
       size: [cutout, cutout]
-    - operation: add
-      what: rectangle
-      where: "/board/"
-      size: [18, 25 + 5]
+#    - operation: add
+#      what: rectangle
+#      where: "/board_component_mcu/"
+#      size: [18, 25 + 5]
+    - operation: subtract
+      name: _through_holes
 
-  pcb:
+  cover_plate:
     - <<: *hull_left_poly
     - <<: *hull_right_poly
-    - operation: add
+      expand: 8
+      fillet: 8
+    - operation: subtract
       what: rectangle
-      where: "/board/"
-      size: [20, 25 + 5 + 12]
-      adjust:
-        shift: [-2, -8]
-      expand: 3
-      fillet: 3
+      where: "-/board/"
+      joints: 1
+      size: [cutout, cutout]
+    - operation: subtract
+      name: _outer_holes
+
+pcbs:
+  main:
+    outlines: pcb
+    footprints:
+      - what: choc
+        where: "-/board/"
+        params:
+          hotswap: true
+          reverse: true
+      - what: trrs
+        where:
+          ref: board_component_trrs
+        params:
+          reverse: true
+
+      # Mounting holes (M2): two at top (near MCU), two at bottom (near TRRS)
+#      - what: mountinghole
+#        where: {ref: board_component_mcu, shift: [-8, 16]}
+#        params: {drill: 2.2, size: 2.2}
+#      - what: mountinghole
+#        where: {ref: board_component_mcu, shift: [8, 16]}
+#        params: {drill: 2.2, size: 2.2}
+#      - what: mountinghole
+#        where: {ref: board_component_trrs, shift: [-8, -18]}
+#        params: {drill: 2.2, size: 2.2}
+#      - what: mountinghole
+#        where: {ref: board_component_trrs, shift: [8, -18]}
+#        params: {drill: 2.2, size: 2.2}
+
+      # RP2040 headers: 9 pads per side, 2.54mm pitch
+      # Left side (x negative from MCU ref)
+      - what: pad
+        where:
+          ref: board_component_mcu
+          shift: [-7, 10.16]
+        params:
+          width: 1.5
+          height: 2.5
+          front: true
+          back: true
+          align: left
+          text: L1
+      - what: pad
+        where: {ref: board_component_mcu, shift: [-7, 7.62]}
+        params: {width: 1.5, height: 2.5, front: true, back: true, align: left, text: L2}
+      - what: pad
+        where: {ref: board_component_mcu, shift: [-7, 5.08]}
+        params: {width: 1.5, height: 2.5, front: true, back: true, align: left, text: L3}
+      - what: pad
+        where: {ref: board_component_mcu, shift: [-7, 2.54]}
+        params: {width: 1.5, height: 2.5, front: true, back: true, align: left, text: L4}
+      - what: pad
+        where: {ref: board_component_mcu, shift: [-7, 0]}
+        params: {width: 1.5, height: 2.5, front: true, back: true, align: left, text: L5}
+      - what: pad
+        where: {ref: board_component_mcu, shift: [-7, -2.54]}
+        params: {width: 1.5, height: 2.5, front: true, back: true, align: left, text: L6}
+      - what: pad
+        where: {ref: board_component_mcu, shift: [-7, -5.08]}
+        params: {width: 1.5, height: 2.5, front: true, back: true, align: left, text: L7}
+      - what: pad
+        where: {ref: board_component_mcu, shift: [-7, -7.62]}
+        params: {width: 1.5, height: 2.5, front: true, back: true, align: left, text: L8}
+      - what: pad
+        where: {ref: board_component_mcu, shift: [-7, -10.16]}
+        params: {width: 1.5, height: 2.5, front: true, back: true, align: left, text: L9}
+
+      # Right side (x positive from MCU ref)
+      - what: pad
+        where: {ref: board_component_mcu, shift: [7, 10.16]}
+        params: {width: 1.5, height: 2.5, front: true, back: true, align: right, text: R1}
+      - what: pad
+        where: {ref: board_component_mcu, shift: [7, 7.62]}
+        params: {width: 1.5, height: 2.5, front: true, back: true, align: right, text: R2}
+      - what: pad
+        where: {ref: board_component_mcu, shift: [7, 5.08]}
+        params: {width: 1.5, height: 2.5, front: true, back: true, align: right, text: R3}
+      - what: pad
+        where: {ref: board_component_mcu, shift: [7, 2.54]}
+        params: {width: 1.5, height: 2.5, front: true, back: true, align: right, text: R4}
+      - what: pad
+        where: {ref: board_component_mcu, shift: [7, 0]}
+        params: {width: 1.5, height: 2.5, front: true, back: true, align: right, text: R5}
+      - what: pad
+        where: {ref: board_component_mcu, shift: [7, -2.54]}
+        params: {width: 1.5, height: 2.5, front: true, back: true, align: right, text: R6}
+      - what: pad
+        where: {ref: board_component_mcu, shift: [7, -5.08]}
+        params: {width: 1.5, height: 2.5, front: true, back: true, align: right, text: R7}
+      - what: pad
+        where: {ref: board_component_mcu, shift: [7, -7.62]}
+        params: {width: 1.5, height: 2.5, front: true, back: true, align: right, text: R8}
+      - what: pad
+        where: {ref: board_component_mcu, shift: [7, -10.16]}
+        params: {width: 1.5, height: 2.5, front: true, back: true, align: right, text: R9}
