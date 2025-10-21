@@ -89,7 +89,7 @@ points:
 
   mirror:
     ref: matrix_index_home
-    distance: 100
+    distance: 110
 
 outlines:
   keys:
@@ -129,7 +129,9 @@ outlines:
         - ref: matrix_thumb_outer_bottom
           shift: [cutout_offset, cutout_offset]
         - ref: matrix_thumb_home_bottom
-          shift: [-cutout_offset - 1, cutout_offset]
+          shift: [-cutout_offset + 6, cutout_offset]
+        - ref: matrix_index_bottom
+          shift: [cutout_offset, 0]
         - ref: matrix_index_top
           shift: [cutout_offset, cutout_offset]
         - ref: matrix_middle_top
@@ -154,7 +156,9 @@ outlines:
         - ref: mirror_matrix_thumb_outer_bottom
           shift: [cutout_offset, cutout_offset]
         - ref: mirror_matrix_thumb_home_bottom
-          shift: [-cutout_offset - 1, cutout_offset]
+          shift: [-cutout_offset + 6, cutout_offset]
+        - ref: mirror_matrix_index_bottom
+          shift: [cutout_offset, 0]
         - ref: mirror_matrix_index_top
           shift: [cutout_offset, cutout_offset]
         - ref: mirror_matrix_middle_top
@@ -195,7 +199,7 @@ outlines:
     - what: circle
       where:
         ref: matrix_thumb_home_bottom
-        shift: [-4.5, 11.5]
+        shift: [-4, 13.5]
       radius: 1
     # right side
     - what: circle
@@ -215,11 +219,6 @@ outlines:
       radius: 1
     - what: circle
       where:
-        ref: mirror_matrix_ring_bottom
-        shift: [-5, -17]
-      radius: 1
-    - what: circle
-      where:
         ref: mirror_matrix_index_bottom
         shift: [0, -25]
       radius: 1
@@ -231,7 +230,7 @@ outlines:
     - what: circle
       where:
         ref: mirror_matrix_thumb_home_bottom
-        shift: [-4.5, 11.5]
+        shift: [-4, 13.5]
       radius: 1.1
 
   _through_holes:
@@ -315,6 +314,8 @@ outlines:
 #      what: rectangle
 #      where: "/board_component_mcu/"
 #      size: [18, 25 + 5]
+    - operation: add
+      name: _board
     - operation: subtract
       name: _through_holes
 
