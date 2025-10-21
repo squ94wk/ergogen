@@ -76,20 +76,16 @@ points:
     board:
       anchor:
         ref: matrix_index_home
-        shift: [23, -14]
+        shift: [kx/2 + 6 + 18, -14] # 6mm off the key
       key:
-        padding: 1 ky
-        spread: 1 kx
-      rows:
-        mcu: {}
-        trrs: {}
+        padding: 0
+        spread: 0
       columns:
         component:
           rows:
-            mcu:
-              shift: [0, 0.5 ky]
+            mcu: {}
             trrs:
-              shift: [0, -1.2 ky]
+              shift: [0, -7] # 7mm below mcu
 
   mirror:
     ref: matrix_index_home
@@ -101,6 +97,22 @@ outlines:
       where: "/matrix/"
       joints: 1
       size: [capx, capy]
+
+  _board:
+    - what: rectangle
+      where: "/board_component_mcu/"
+      joints: 1
+      size: [18, 23.5]
+      adjust:
+        shift: [-18/2, 23.5/2] # origin is bottom right
+    - what: rectangle
+      where: "/board_component_trrs/"
+      joints: 1
+      size: [14, 6]
+      adjust:
+        shift: [-7, 3] # origin is bottom right
+  board:
+    - name: _board
 
   _hull_left:
     - &hull_left_poly
