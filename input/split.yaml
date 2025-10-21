@@ -9,6 +9,7 @@ units:
   capy: cy - 0.5
   cutout: 13.8
   cutout_offset: cutout / 2
+  mcu_offset: 1.2
 
 points:
   key:
@@ -70,7 +71,7 @@ points:
               skip: true
           key:
             splay: -4
-            stagger: -0.8
+            stagger: -0.75
             spread: 1 kx + 1
 
     board:
@@ -85,7 +86,7 @@ points:
           rows:
             mcu: {}
             trrs:
-              shift: [0, -7] # 7mm below mcu
+              shift: [0, -7.5] # 7.5mm below mcu
 
   mirror:
     ref: matrix_index_home
@@ -253,7 +254,7 @@ outlines:
         - ref: matrix_thumb_outer_bottom
           shift: [cutout_offset, cutout_offset]
         - ref: board_component_mcu
-          shift: [20/2, 25/2]
+          shift: [0, 23.5]
         - <<: *hole_top_inner_left
     - &board_back_fill_right_poly
       what: polygon
@@ -265,7 +266,7 @@ outlines:
         - ref: mirror_matrix_thumb_outer_bottom
           shift: [cutout_offset, cutout_offset]
         - ref: mirror_board_component_mcu
-          shift: [20/2, 25/2]
+          shift: [0, 23.5]
         - <<: *hole_top_inner_right
       expand: 8
     - operation: subtract
@@ -336,96 +337,45 @@ outlines:
 
 pcbs:
   main:
-    outlines: pcb
+    outlines:
+      main:
+        outline: pcb
     footprints:
       - what: choc
-        where: "-/board/"
+        where: "/matrix/"
         params:
+          keycaps: true
           hotswap: true
           reverse: true
+          from: "{{column_net}}"
+          to: "{{colrow}}"
       - what: trrs
         where:
           ref: board_component_trrs
+          shift: [ 0, 3 ]
+          rotate: -90
         params:
+          side: "F"
+          symmetric: false
+      - what: trrs
+        where:
+          ref: mirror_board_component_trrs
+          shift: [ 0, 3 ]
+          rotate: -90
+        params:
+          side: "F"
+          symmetric: false
+      - what: rp2040
+        params:
+          side: "B"
           reverse: true
-
-      # Mounting holes (M2): two at top (near MCU), two at bottom (near TRRS)
-#      - what: mountinghole
-#        where: {ref: board_component_mcu, shift: [-8, 16]}
-#        params: {drill: 2.2, size: 2.2}
-#      - what: mountinghole
-#        where: {ref: board_component_mcu, shift: [8, 16]}
-#        params: {drill: 2.2, size: 2.2}
-#      - what: mountinghole
-#        where: {ref: board_component_trrs, shift: [-8, -18]}
-#        params: {drill: 2.2, size: 2.2}
-#      - what: mountinghole
-#        where: {ref: board_component_trrs, shift: [8, -18]}
-#        params: {drill: 2.2, size: 2.2}
-
-      # RP2040 headers: 9 pads per side, 2.54mm pitch
-      # Left side (x negative from MCU ref)
-      - what: pad
         where:
           ref: board_component_mcu
-          shift: [-7, 10.16]
+          shift: [ -18 - mcu_offset, -mcu_offset ]
+      - what: rp2040
         params:
-          width: 1.5
-          height: 2.5
-          front: true
-          back: true
-          align: left
-          text: L1
-      - what: pad
-        where: {ref: board_component_mcu, shift: [-7, 7.62]}
-        params: {width: 1.5, height: 2.5, front: true, back: true, align: left, text: L2}
-      - what: pad
-        where: {ref: board_component_mcu, shift: [-7, 5.08]}
-        params: {width: 1.5, height: 2.5, front: true, back: true, align: left, text: L3}
-      - what: pad
-        where: {ref: board_component_mcu, shift: [-7, 2.54]}
-        params: {width: 1.5, height: 2.5, front: true, back: true, align: left, text: L4}
-      - what: pad
-        where: {ref: board_component_mcu, shift: [-7, 0]}
-        params: {width: 1.5, height: 2.5, front: true, back: true, align: left, text: L5}
-      - what: pad
-        where: {ref: board_component_mcu, shift: [-7, -2.54]}
-        params: {width: 1.5, height: 2.5, front: true, back: true, align: left, text: L6}
-      - what: pad
-        where: {ref: board_component_mcu, shift: [-7, -5.08]}
-        params: {width: 1.5, height: 2.5, front: true, back: true, align: left, text: L7}
-      - what: pad
-        where: {ref: board_component_mcu, shift: [-7, -7.62]}
-        params: {width: 1.5, height: 2.5, front: true, back: true, align: left, text: L8}
-      - what: pad
-        where: {ref: board_component_mcu, shift: [-7, -10.16]}
-        params: {width: 1.5, height: 2.5, front: true, back: true, align: left, text: L9}
-
-      # Right side (x positive from MCU ref)
-      - what: pad
-        where: {ref: board_component_mcu, shift: [7, 10.16]}
-        params: {width: 1.5, height: 2.5, front: true, back: true, align: right, text: R1}
-      - what: pad
-        where: {ref: board_component_mcu, shift: [7, 7.62]}
-        params: {width: 1.5, height: 2.5, front: true, back: true, align: right, text: R2}
-      - what: pad
-        where: {ref: board_component_mcu, shift: [7, 5.08]}
-        params: {width: 1.5, height: 2.5, front: true, back: true, align: right, text: R3}
-      - what: pad
-        where: {ref: board_component_mcu, shift: [7, 2.54]}
-        params: {width: 1.5, height: 2.5, front: true, back: true, align: right, text: R4}
-      - what: pad
-        where: {ref: board_component_mcu, shift: [7, 0]}
-        params: {width: 1.5, height: 2.5, front: true, back: true, align: right, text: R5}
-      - what: pad
-        where: {ref: board_component_mcu, shift: [7, -2.54]}
-        params: {width: 1.5, height: 2.5, front: true, back: true, align: right, text: R6}
-      - what: pad
-        where: {ref: board_component_mcu, shift: [7, -5.08]}
-        params: {width: 1.5, height: 2.5, front: true, back: true, align: right, text: R7}
-      - what: pad
-        where: {ref: board_component_mcu, shift: [7, -7.62]}
-        params: {width: 1.5, height: 2.5, front: true, back: true, align: right, text: R8}
-      - what: pad
-        where: {ref: board_component_mcu, shift: [7, -10.16]}
-        params: {width: 1.5, height: 2.5, front: true, back: true, align: right, text: R9}
+          side: "B"
+          reverse: true
+        where:
+          ref: mirror_board_component_mcu
+          shift: [ mcu_offset, -mcu_offset ]
