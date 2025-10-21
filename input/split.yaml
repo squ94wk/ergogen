@@ -50,20 +50,28 @@ points:
             splay: -1
             spread: kx + 1
             stagger: -2
-    thumb:
-      anchor:
-        ref: matrix_index_bottom
-        orient: -10
-        shift: [0.95 kx, -1 ky]
-      rows:
-        bottom: {}
-      columns:
-        home:
-          rows: {}
-          key:
-        outer:
+        thumb_home:
           rows:
             bottom: {}
+            home:
+              skip: true
+            top:
+              skip: true
+          key:
+            splay: -10
+            stagger: -1.2ky
+            spread: 0.75 kx
+        thumb_outer:
+          rows:
+            bottom: {}
+            home:
+              skip: true
+            top:
+              skip: true
+          key:
+            splay: -4
+            stagger: -0.8
+            spread: 1 kx + 1
 
     board:
       anchor:
@@ -90,7 +98,7 @@ points:
 outlines:
   keys:
     - what: rectangle
-      where: "-/board/"
+      where: "/matrix/"
       joints: 1
       size: [capx, capy]
 
@@ -102,13 +110,13 @@ outlines:
           shift: [-cutout_offset, -cutout_offset]
         - ref: matrix_pinky_bottom
           shift: [cutout_offset, -cutout_offset]
-        - ref: thumb_home_bottom
+        - ref: matrix_thumb_home_bottom
           shift: [-cutout_offset, -cutout_offset]
-        - ref: thumb_outer_bottom
+        - ref: matrix_thumb_outer_bottom
           shift: [cutout_offset, -cutout_offset]
-        - ref: thumb_outer_bottom
+        - ref: matrix_thumb_outer_bottom
           shift: [cutout_offset, cutout_offset]
-        - ref: thumb_home_bottom
+        - ref: matrix_thumb_home_bottom
           shift: [-cutout_offset - 1, cutout_offset]
         - ref: matrix_index_top
           shift: [cutout_offset, cutout_offset]
@@ -127,13 +135,13 @@ outlines:
       points:
         - ref: mirror_matrix_pinky_home
           shift: [-cutout_offset, -cutout_offset]
-        - ref: mirror_thumb_home_bottom
+        - ref: mirror_matrix_thumb_home_bottom
           shift: [-cutout_offset, -cutout_offset]
-        - ref: mirror_thumb_outer_bottom
+        - ref: mirror_matrix_thumb_outer_bottom
           shift: [cutout_offset, -cutout_offset]
-        - ref: mirror_thumb_outer_bottom
+        - ref: mirror_matrix_thumb_outer_bottom
           shift: [cutout_offset, cutout_offset]
-        - ref: mirror_thumb_home_bottom
+        - ref: mirror_matrix_thumb_home_bottom
           shift: [-cutout_offset - 1, cutout_offset]
         - ref: mirror_matrix_index_top
           shift: [cutout_offset, cutout_offset]
@@ -174,7 +182,7 @@ outlines:
       radius: 1
     - what: circle
       where:
-        ref: thumb_home_bottom
+        ref: matrix_thumb_home_bottom
         shift: [-4.5, 11.5]
       radius: 1
     # right side
@@ -210,7 +218,7 @@ outlines:
       radius: 1
     - what: circle
       where:
-        ref: mirror_thumb_home_bottom
+        ref: mirror_matrix_thumb_home_bottom
         shift: [-4.5, 11.5]
       radius: 1.1
 
@@ -229,9 +237,9 @@ outlines:
       points:
         - ref: matrix_index_top
           shift: [cutout_offset, cutout_offset]
-        - ref: thumb_home_bottom
+        - ref: matrix_thumb_home_bottom
           shift: [-cutout_offset, -cutout_offset - 1]
-        - ref: thumb_outer_bottom
+        - ref: matrix_thumb_outer_bottom
           shift: [-cutout_offset, cutout_offset]
         - ref: board_component_mcu
           shift: [20/2, 25/2]
@@ -240,9 +248,9 @@ outlines:
       points:
         - ref: mirror_matrix_index_top
           shift: [cutout_offset, cutout_offset]
-        - ref: mirror_thumb_home_bottom
+        - ref: mirror_matrix_thumb_home_bottom
           shift: [-cutout_offset, -cutout_offset - 1]
-        - ref: mirror_thumb_outer_bottom
+        - ref: mirror_matrix_thumb_outer_bottom
           shift: [-cutout_offset, cutout_offset]
         - ref: mirror_board_component_mcu
           shift: [20/2, 25/2]
@@ -268,22 +276,22 @@ outlines:
   top_plate:
     - <<: *hull_left_poly
     - <<: *hull_right_poly
-    - &top_hole_back_fill_left_poly
-      what: polygon
-      points:
-        - ref: matrix_index_top
-          shift: [cutout_offset, cutout_offset]
-        - ref: thumb_home_bottom
-          shift: [-cutout_offset, -cutout_offset - 1]
-        - ref: thumb_outer_bottom
-          shift: [-cutout_offset, cutout_offset]
-        - ref: board_component_mcu
-          shift: [20/2, 25/2]
+#    - &top_hole_back_fill_left_poly
+#      what: polygon
+#      points:
+#        - ref: holes_hole_top_inner
+#          shift: [10, 10]
+#        - ref: matrix_thumb_home_bottom
+#          shift: [-cutout_offset, -cutout_offset - 1]
+#        - ref: matrix_thumb_outer_bottom
+#          shift: [-cutout_offset, cutout_offset]
+#        - ref: board_component_mcu
+#          shift: [20/2, 25/2]
       expand: 6
       fillet: 6
     - operation: subtract
       what: rectangle
-      where: "-/board/"
+      where: "/matrix/"
       joints: 1
       size: [cutout, cutout]
 #    - operation: add
