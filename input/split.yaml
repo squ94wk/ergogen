@@ -176,7 +176,7 @@ outlines:
         shift: [0, -25]
       radius: 1
     - what: circle
-      where:
+      where: &hole_top_inner_left
         ref: matrix_index_top
         shift: [13, 5]
       radius: 1
@@ -212,7 +212,7 @@ outlines:
         shift: [0, -25]
       radius: 1
     - what: circle
-      where:
+      where: &hole_top_inner_right
         ref: mirror_matrix_index_top
         shift: [13, 5]
       radius: 1
@@ -238,22 +238,24 @@ outlines:
         - ref: matrix_index_top
           shift: [cutout_offset, cutout_offset]
         - ref: matrix_thumb_home_bottom
-          shift: [-cutout_offset, -cutout_offset - 1]
+          shift: [-cutout_offset, 0]
         - ref: matrix_thumb_outer_bottom
-          shift: [-cutout_offset, cutout_offset]
+          shift: [cutout_offset, cutout_offset]
         - ref: board_component_mcu
           shift: [20/2, 25/2]
+        - <<: *hole_top_inner_left
     - &board_back_fill_right_poly
       what: polygon
       points:
         - ref: mirror_matrix_index_top
           shift: [cutout_offset, cutout_offset]
         - ref: mirror_matrix_thumb_home_bottom
-          shift: [-cutout_offset, -cutout_offset - 1]
+          shift: [-cutout_offset, 0]
         - ref: mirror_matrix_thumb_outer_bottom
-          shift: [-cutout_offset, cutout_offset]
+          shift: [cutout_offset, cutout_offset]
         - ref: mirror_board_component_mcu
           shift: [20/2, 25/2]
+        - <<: *hole_top_inner_right
       expand: 8
     - operation: subtract
       name: _outer_holes
@@ -276,17 +278,20 @@ outlines:
   top_plate:
     - <<: *hull_left_poly
     - <<: *hull_right_poly
-#    - &top_hole_back_fill_left_poly
-#      what: polygon
-#      points:
-#        - ref: holes_hole_top_inner
-#          shift: [10, 10]
-#        - ref: matrix_thumb_home_bottom
-#          shift: [-cutout_offset, -cutout_offset - 1]
-#        - ref: matrix_thumb_outer_bottom
-#          shift: [-cutout_offset, cutout_offset]
-#        - ref: board_component_mcu
-#          shift: [20/2, 25/2]
+    - &top_hole_back_fill_left_poly
+      what: polygon
+      points:
+        - <<: *hole_top_inner_left
+        - ref: matrix_index_home
+        - ref: matrix_index_top
+          shift: [cutout_offset, cutout_offset]
+    - &top_hole_back_fill_right_poly
+      what: polygon
+      points:
+        - <<: *hole_top_inner_right
+        - ref: mirror_matrix_index_home
+        - ref: mirror_matrix_index_top
+          shift: [cutout_offset, cutout_offset]
       expand: 6
       fillet: 6
     - operation: subtract
@@ -304,11 +309,13 @@ outlines:
   cover_plate:
     - <<: *hull_left_poly
     - <<: *hull_right_poly
+    - <<: *top_hole_back_fill_left_poly
+    - <<: *top_hole_back_fill_right_poly
       expand: 8
       fillet: 8
     - operation: subtract
       what: rectangle
-      where: "-/board/"
+      where: "/matrix/"
       joints: 1
       size: [cutout, cutout]
     - operation: subtract
