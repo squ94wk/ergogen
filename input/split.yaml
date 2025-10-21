@@ -11,12 +11,13 @@ units:
   cutout_offset: cutout / 2
 
 points:
+  key:
+    padding: 1 ky
+    spread: 1 kx
   zones:
     matrix:
-      anchor: {}
-      key:
-        padding: 1 ky
-        spread: 1 kx
+      anchor:
+        shift: [ 100, -100 ]
       rows:
         bottom: {}
         home: {}
@@ -49,16 +50,20 @@ points:
             splay: -1
             spread: kx + 1
             stagger: -2
-        thumb:
+    thumb:
+      anchor:
+        ref: matrix_index_bottom
+        orient: -10
+        shift: [0.95 kx, -1 ky]
+      rows:
+        bottom: {}
+      columns:
+        home:
+          rows: {}
+          key:
+        outer:
           rows:
             bottom: {}
-            home: {}
-            top:
-              skip: true
-          key:
-            splay: -100
-            spread: 0.75 kx
-            stagger: -1.2 ky
 
     board:
       anchor:
@@ -97,14 +102,14 @@ outlines:
           shift: [-cutout_offset, -cutout_offset]
         - ref: matrix_pinky_bottom
           shift: [cutout_offset, -cutout_offset]
-        - ref: matrix_thumb_bottom
+        - ref: thumb_home_bottom
+          shift: [-cutout_offset, -cutout_offset]
+        - ref: thumb_outer_bottom
           shift: [cutout_offset, -cutout_offset]
-        - ref: matrix_thumb_home
+        - ref: thumb_outer_bottom
           shift: [cutout_offset, cutout_offset]
-        - ref: matrix_thumb_home
-          shift: [-cutout_offset, cutout_offset]
-        - ref: matrix_thumb_bottom
-          shift: [-cutout_offset, -cutout_offset - 1]
+        - ref: thumb_home_bottom
+          shift: [-cutout_offset - 1, cutout_offset]
         - ref: matrix_index_top
           shift: [cutout_offset, cutout_offset]
         - ref: matrix_middle_top
@@ -122,16 +127,14 @@ outlines:
       points:
         - ref: mirror_matrix_pinky_home
           shift: [-cutout_offset, -cutout_offset]
-        - ref: mirror_matrix_ring_bottom
+        - ref: mirror_thumb_home_bottom
           shift: [-cutout_offset, -cutout_offset]
-        - ref: mirror_matrix_thumb_bottom
+        - ref: mirror_thumb_outer_bottom
           shift: [cutout_offset, -cutout_offset]
-        - ref: mirror_matrix_thumb_home
+        - ref: mirror_thumb_outer_bottom
           shift: [cutout_offset, cutout_offset]
-        - ref: mirror_matrix_thumb_home
-          shift: [-cutout_offset, cutout_offset]
-        - ref: mirror_matrix_thumb_bottom
-          shift: [-cutout_offset, -cutout_offset - 1]
+        - ref: mirror_thumb_home_bottom
+          shift: [-cutout_offset - 1, cutout_offset]
         - ref: mirror_matrix_index_top
           shift: [cutout_offset, cutout_offset]
         - ref: mirror_matrix_middle_top
@@ -166,13 +169,13 @@ outlines:
       radius: 1
     - what: circle
       where:
-        ref: matrix_middle_top
-        shift: [10.5, 8]
+        ref: matrix_index_top
+        shift: [13, 5]
       radius: 1
     - what: circle
       where:
-        ref: matrix_thumb_bottom
-        shift: [-11.5, -4.5]
+        ref: thumb_home_bottom
+        shift: [-4.5, 11.5]
       radius: 1
     # right side
     - what: circle
@@ -202,18 +205,18 @@ outlines:
       radius: 1
     - what: circle
       where:
-        ref: mirror_matrix_middle_top
-        shift: [10.5, 8]
+        ref: mirror_matrix_index_top
+        shift: [13, 5]
       radius: 1
     - what: circle
       where:
-        ref: mirror_matrix_thumb_bottom
-        shift: [-11.5, -4.5]
-      radius: 1
+        ref: mirror_thumb_home_bottom
+        shift: [-4.5, 11.5]
+      radius: 1.1
 
   _through_holes:
     - name: _holes
-      expand: 0.5
+      expand: 0.6
 
   _outer_holes:
     - name: _holes
@@ -226,9 +229,9 @@ outlines:
       points:
         - ref: matrix_index_top
           shift: [cutout_offset, cutout_offset]
-        - ref: matrix_thumb_bottom
+        - ref: thumb_home_bottom
           shift: [-cutout_offset, -cutout_offset - 1]
-        - ref: matrix_thumb_home
+        - ref: thumb_outer_bottom
           shift: [-cutout_offset, cutout_offset]
         - ref: board_component_mcu
           shift: [20/2, 25/2]
@@ -237,9 +240,9 @@ outlines:
       points:
         - ref: mirror_matrix_index_top
           shift: [cutout_offset, cutout_offset]
-        - ref: mirror_matrix_thumb_bottom
+        - ref: mirror_thumb_home_bottom
           shift: [-cutout_offset, -cutout_offset - 1]
-        - ref: mirror_matrix_thumb_home
+        - ref: mirror_thumb_outer_bottom
           shift: [-cutout_offset, cutout_offset]
         - ref: mirror_board_component_mcu
           shift: [20/2, 25/2]
@@ -265,6 +268,17 @@ outlines:
   top_plate:
     - <<: *hull_left_poly
     - <<: *hull_right_poly
+    - &top_hole_back_fill_left_poly
+      what: polygon
+      points:
+        - ref: matrix_index_top
+          shift: [cutout_offset, cutout_offset]
+        - ref: thumb_home_bottom
+          shift: [-cutout_offset, -cutout_offset - 1]
+        - ref: thumb_outer_bottom
+          shift: [-cutout_offset, cutout_offset]
+        - ref: board_component_mcu
+          shift: [20/2, 25/2]
       expand: 6
       fillet: 6
     - operation: subtract
