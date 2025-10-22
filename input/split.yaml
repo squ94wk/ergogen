@@ -200,53 +200,53 @@ outlines:
       what: circle
       where: &hole_pinky_home_left
         ref: matrix_pinky_home
-        shift: [-3, 12]
+        shift: [-5, 14]
       radius: 2.2/2
     - <<: *m25_hole
       where: &hole_ring_top_left
         ref: matrix_ring_top
-        shift: [-12, 2]
+        shift: [-13, 3]
     - <<: *m25_hole
       where: &hole_ring_bottom_left
         ref: matrix_ring_bottom
-        shift: [-5, -17]
+        shift: [-7, -19.75]
     - <<: *m25_hole
       where: &hole_index_bottom_left
-        ref: matrix_index_bottom
-        shift: [0, -25]
+        ref: matrix_thumb_home_bottom
+        shift: [-13, -9.75]
     - <<: *m25_hole
       where: &hole_top_inner_left
         ref: matrix_index_top
-        shift: [13, 5]
+        shift: [13, 6]
     - <<: *m25_hole
       where: &hole_thumb_home_bottom_left
         ref: matrix_thumb_home_bottom
-        shift: [-4, 13.5]
+        shift: [-2, 15]
     # right side
     - <<: *m25_hole
       where: &hole_pinky_home_right
         ref: mirror_matrix_pinky_home
-        shift: [-3, 12]
+        shift: [-5, 14]
     - <<: *m25_hole
       where: &hole_pinky_bottom_right
         ref: mirror_matrix_pinky_home
-        shift: [6, -12]
+        shift: [4, -14.5]
     - <<: *m25_hole
       where: &hole_ring_top_right
         ref: mirror_matrix_ring_top
-        shift: [-12, 2]
+        shift: [-13, 3]
     - <<: *m25_hole
       where: &hole_index_bottom_right
-        ref: mirror_matrix_index_bottom
-        shift: [0, -25]
+        ref: mirror_matrix_thumb_home_bottom
+        shift: [-13, -9]
     - <<: *m25_hole
       where: &hole_top_inner_right
         ref: mirror_matrix_index_top
-        shift: [13, 5]
+        shift: [13, 6]
     - <<: *m25_hole
       where: &hole_thumb_home_bottom_right
         ref: mirror_matrix_thumb_home_bottom
-        shift: [-4, 13.5]
+        shift: [-2, 15]
 
   _through_holes:
     - name: _holes
@@ -292,8 +292,8 @@ outlines:
     - <<: *hull_right_poly
     - <<: *board_back_fill_left_poly
     - <<: *board_back_fill_right_poly
-      expand: 6
-      fillet: 6
+      expand: 7
+      fillet: 7
 
   top_plate:
     - <<: *hull_left_poly
@@ -313,17 +313,17 @@ outlines:
         - ref: mirror_matrix_index_top
           shift: [cutout_offset, cutout_offset]
       expand: 2
-      fillet: 6
+      fillet: 8
     - &usb_cable_clearance
       operation: subtract
       name: _usb_cable
       adjust:
-        shift: [4.5, 0]
+        shift: [5.5, 0]
     - <<: *usb_cable_clearance
       adjust:
-        shift: [-4.5, 0]
-      expand: 4
-      fillet: 4
+        shift: [-5.5, 0]
+      expand: 5
+      fillet: 5
     - &noop_outline
       what: rectangle
       where: "//"
@@ -342,6 +342,8 @@ outlines:
     - <<: *top_hole_back_fill_right_poly
       expand: 4
     - <<: *usb_cable_clearance
+      adjust:
+        shift: [4.5, 0]
     - <<: *usb_cable_clearance
       adjust:
         shift: [-4.5, 0]
@@ -357,6 +359,8 @@ outlines:
       name: keys
     - operation: subtract
       name: _holes
+    - operation: stack
+      name: board
     - operation: stack
       name: _screws
 
