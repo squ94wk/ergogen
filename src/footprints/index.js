@@ -18,4 +18,5 @@ module.exports = {
     trrs: require('./trrs'),
     via: require('./via'),
     rp2040: require('./rp2040'),
+    npth: require('./npth'),
 }

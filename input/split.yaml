@@ -173,22 +173,22 @@ outlines:
 
   _holes:
     - what: circle
-      where:
+      where: &hole_pinky_home_left
         ref: matrix_pinky_home
         shift: [-3, 12]
       radius: 1
     - what: circle
-      where:
+      where: &hole_ring_top_left
         ref: matrix_ring_top
         shift: [-12, 2]
       radius: 1
     - what: circle
-      where:
+      where: &hole_ring_bottom_left
         ref: matrix_ring_bottom
         shift: [-5, -17]
       radius: 1
     - what: circle
-      where:
+      where: &hole_index_bottom_left
         ref: matrix_index_bottom
         shift: [0, -25]
       radius: 1
@@ -198,28 +198,28 @@ outlines:
         shift: [13, 5]
       radius: 1
     - what: circle
-      where:
+      where: &hole_thumb_home_bottom_left
         ref: matrix_thumb_home_bottom
         shift: [-4, 13.5]
       radius: 1
     # right side
     - what: circle
-      where:
+      where: &hole_pinky_home_right
         ref: mirror_matrix_pinky_home
         shift: [-3, 12]
       radius: 1
     - what: circle
-      where:
+      where: &hole_pinky_bottom_right
         ref: mirror_matrix_pinky_home
         shift: [6, -12]
       radius: 1
     - what: circle
-      where:
+      where: &hole_ring_top_right
         ref: mirror_matrix_ring_top
         shift: [-12, 2]
       radius: 1
     - what: circle
-      where:
+      where: &hole_index_bottom_right
         ref: mirror_matrix_index_bottom
         shift: [0, -25]
       radius: 1
@@ -229,7 +229,7 @@ outlines:
         shift: [13, 5]
       radius: 1
     - what: circle
-      where:
+      where: &hole_thumb_home_bottom_right
         ref: mirror_matrix_thumb_home_bottom
         shift: [-4, 13.5]
       radius: 1.1
@@ -284,8 +284,6 @@ outlines:
     - <<: *board_back_fill_right_poly
       expand: 6
       fillet: 6
-    - operation: subtract
-      name: _through_holes
 
   top_plate:
     - <<: *hull_left_poly
@@ -379,3 +377,31 @@ pcbs:
         where:
           ref: mirror_board_component_mcu
           shift: [ mcu_offset, -mcu_offset ]
+      - &npth_3mm
+        what: npth
+        params:
+          hole_size: 3
+          hole_drill: 3
+        where: *hole_pinky_home_left
+      - <<: *npth_3mm
+        where: *hole_ring_top_left
+      - <<: *npth_3mm
+        where: *hole_ring_bottom_left
+      - <<: *npth_3mm
+        where: *hole_index_bottom_left
+      - <<: *npth_3mm
+        where: *hole_top_inner_left
+      - <<: *npth_3mm
+        where: *hole_thumb_home_bottom_left
+      - <<: *npth_3mm
+        where: *hole_pinky_home_right
+      - <<: *npth_3mm
+        where: *hole_pinky_bottom_right
+      - <<: *npth_3mm
+        where: *hole_ring_top_right
+      - <<: *npth_3mm
+        where: *hole_index_bottom_right
+      - <<: *npth_3mm
+        where: *hole_top_inner_right
+      - <<: *npth_3mm
+        where: *hole_thumb_home_bottom_right
