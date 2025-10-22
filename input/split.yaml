@@ -2,13 +2,14 @@ meta:
   engine: "4.0.0"
 
 units:
-  # Proxy spacing vars (MX: use u/u; Choc: cx/cy)
   kx: cx # 18
   ky: cy # 17
-  capx: cx - 0.5
-  capy: cy - 0.5
+  cap_x: cx - 0.5
+  cap_y: cy - 0.5
   cutout: 13.8
   cutout_offset: cutout / 2
+  mcu_x: 18
+  mcu_y: 23.5
   mcu_offset: 1.2
 
 points:
@@ -77,7 +78,7 @@ points:
     board:
       anchor:
         ref: matrix_index_home
-        shift: [kx/2 + 6 + 18, -14] # 6mm off the key
+        shift: [kx/2 + 6 + mcu_x, -14] # 6mm off the key
       key:
         padding: 0
         spread: 0
@@ -97,23 +98,46 @@ outlines:
     - what: rectangle
       where: "/matrix/"
       joints: 1
-      size: [capx, capy]
+      size: [cap_x, cap_y]
+      corner: 1
+
+  _key_cutouts:
+    - what: rectangle
+      where: "/matrix/"
+      joints: 1
+      size: [cutout, cutout]
 
   _board:
     - what: rectangle
       where: "/board_component_mcu/"
       joints: 1
-      size: [18, 23.5]
+      size: [mcu_x, mcu_y]
       adjust:
-        shift: [-18/2, 23.5/2] # origin is bottom right
+        shift: [-mcu_x/2, mcu_y/2] # origin is bottom right
     - what: rectangle
       where: "/board_component_trrs/"
       joints: 1
       size: [14, 6]
       adjust:
         shift: [-7, 3] # origin is bottom right
+    - what: rectangle # protruding USB connector
+      where: "/board_component_mcu/"
+      joints: 1
+      size: [8.63, 1]
+      adjust:
+        shift: [-mcu_x/2, mcu_y + 0.5] # center of MCU top
+
+  _usb_cable:
+    - what: rectangle # USB cable
+      where: "/board_component_mcu/"
+      joints: 1
+      size: [12, 19]
+      adjust:
+        shift: [-mcu_x/2, mcu_y + 1 + 19/2] # starting at USB connector
+
   board:
     - name: _board
+    - name: _usb_cable
 
   _hull_left:
     - &hull_left_poly
@@ -172,74 +196,65 @@ outlines:
           shift: [-cutout_offset, cutout_offset]
 
   _holes:
-    - what: circle
+    - &m25_hole
+      what: circle
       where: &hole_pinky_home_left
         ref: matrix_pinky_home
         shift: [-3, 12]
-      radius: 1
-    - what: circle
+      radius: 2.2/2
+    - <<: *m25_hole
       where: &hole_ring_top_left
         ref: matrix_ring_top
         shift: [-12, 2]
-      radius: 1
-    - what: circle
+    - <<: *m25_hole
       where: &hole_ring_bottom_left
         ref: matrix_ring_bottom
         shift: [-5, -17]
-      radius: 1
-    - what: circle
+    - <<: *m25_hole
       where: &hole_index_bottom_left
         ref: matrix_index_bottom
         shift: [0, -25]
-      radius: 1
-    - what: circle
+    - <<: *m25_hole
       where: &hole_top_inner_left
         ref: matrix_index_top
         shift: [13, 5]
-      radius: 1
-    - what: circle
+    - <<: *m25_hole
       where: &hole_thumb_home_bottom_left
         ref: matrix_thumb_home_bottom
         shift: [-4, 13.5]
-      radius: 1
     # right side
-    - what: circle
+    - <<: *m25_hole
       where: &hole_pinky_home_right
         ref: mirror_matrix_pinky_home
         shift: [-3, 12]
-      radius: 1
-    - what: circle
+    - <<: *m25_hole
       where: &hole_pinky_bottom_right
         ref: mirror_matrix_pinky_home
         shift: [6, -12]
-      radius: 1
-    - what: circle
+    - <<: *m25_hole
       where: &hole_ring_top_right
         ref: mirror_matrix_ring_top
         shift: [-12, 2]
-      radius: 1
-    - what: circle
+    - <<: *m25_hole
       where: &hole_index_bottom_right
         ref: mirror_matrix_index_bottom
         shift: [0, -25]
-      radius: 1
-    - what: circle
+    - <<: *m25_hole
       where: &hole_top_inner_right
         ref: mirror_matrix_index_top
         shift: [13, 5]
-      radius: 1
-    - what: circle
+    - <<: *m25_hole
       where: &hole_thumb_home_bottom_right
         ref: mirror_matrix_thumb_home_bottom
         shift: [-4, 13.5]
-      radius: 1.1
 
   _through_holes:
     - name: _holes
-      expand: 0.6
+      expand: 0.2 # 2.9
 
-  _outer_holes:
+  _screws:
     - name: _holes
+      expand: 1.25 # 4.7
 
   bottom_plate:
     - <<: *hull_left_poly
@@ -254,7 +269,7 @@ outlines:
         - ref: matrix_thumb_outer_bottom
           shift: [cutout_offset, cutout_offset]
         - ref: board_component_mcu
-          shift: [0, 23.5]
+          shift: [0, mcu_y]
         - <<: *hole_top_inner_left
     - &board_back_fill_right_poly
       what: polygon
@@ -266,16 +281,11 @@ outlines:
         - ref: mirror_matrix_thumb_outer_bottom
           shift: [cutout_offset, cutout_offset]
         - ref: mirror_board_component_mcu
-          shift: [0, 23.5]
+          shift: [0, mcu_y]
         - <<: *hole_top_inner_right
       expand: 8
     - operation: subtract
-      name: _outer_holes
-  #    - operation: subtract
-  #      what: rectangle
-  #      where: "-/board/"
-  #      joints: 1
-  #      size: [capx, capy]
+      name: _holes
 
   pcb:
     - <<: *hull_left_poly
@@ -302,19 +312,26 @@ outlines:
         - ref: mirror_matrix_index_home
         - ref: mirror_matrix_index_top
           shift: [cutout_offset, cutout_offset]
-      expand: 6
+      expand: 2
       fillet: 6
-    - operation: subtract
+    - &usb_cable_clearance
+      operation: subtract
+      name: _usb_cable
+      adjust:
+        shift: [4.5, 0]
+    - <<: *usb_cable_clearance
+      adjust:
+        shift: [-4.5, 0]
+      expand: 4
+      fillet: 4
+    - &noop_outline
       what: rectangle
-      where: "/matrix/"
-      joints: 1
-      size: [cutout, cutout]
-#    - operation: add
-#      what: rectangle
-#      where: "/board_component_mcu/"
-#      size: [18, 25 + 5]
-    - operation: add
-      name: _board
+      where: "//"
+      fillet: 2
+    - operation: subtract
+      name: _key_cutouts
+    - operation: stack
+      name: board
     - operation: subtract
       name: _through_holes
 
@@ -323,15 +340,25 @@ outlines:
     - <<: *hull_right_poly
     - <<: *top_hole_back_fill_left_poly
     - <<: *top_hole_back_fill_right_poly
-      expand: 8
+      expand: 4
+    - <<: *usb_cable_clearance
+    - <<: *usb_cable_clearance
+      adjust:
+        shift: [-4.5, 0]
+      expand: 4
       fillet: 8
+    - <<: *noop_outline
+      fillet: 4
+    - <<: *noop_outline
+      fillet: 2
     - operation: subtract
-      what: rectangle
-      where: "/matrix/"
-      joints: 1
-      size: [cutout, cutout]
+      name: _key_cutouts
+    - operation: stack
+      name: keys
     - operation: subtract
-      name: _outer_holes
+      name: _holes
+    - operation: stack
+      name: _screws
 
 pcbs:
   main:
