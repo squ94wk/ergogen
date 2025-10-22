@@ -78,7 +78,7 @@ points:
     board:
       anchor:
         ref: matrix_index_home
-        shift: [kx/2 + 6 + mcu_x, -14] # 6mm off the key
+        shift: [kx/2 + 7 + mcu_x, -14] # anchor is outer edge; inner edge is 7mm from row
       key:
         padding: 0
         spread: 0
@@ -294,6 +294,10 @@ outlines:
     - <<: *board_back_fill_right_poly
       expand: 7
       fillet: 7
+    - operation: stack
+      name: _board
+    - operation: stack
+      name: _key_cutouts
 
   top_plate:
     - <<: *hull_left_poly
