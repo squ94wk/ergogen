@@ -19,4 +19,5 @@ module.exports = {
     via: require('./via'),
     rp2040: require('./rp2040'),
     npth: require('./npth'),
+    usbc_breakout: require('./usbc_breakout'),
 }
