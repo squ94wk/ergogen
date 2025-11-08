@@ -487,224 +487,232 @@ outlines:
 #    - name: cover_plate
 #      operation: stack
 
-#pcbs:
-#  main:
-#    outlines:
-#      main:
-#        outline: pcb
-#    footprints:
-#      # Left board switches (13 keys) - ordered by row then column
-#      # Top row: pinky → ring → middle → index
-#      - &choc_switch
-#        where: matrix_ring_top
-#        what: choc
-#        params: &pcb_key_params
-#          keycaps: true
-#          hotswap: true
-#          from: L_GND
-#          to: L_GP2
-#      - where: matrix_middle_top
-#        <<: *choc_switch
-#        params: { <<: *pcb_key_params, to: L_GP1 }
-#      - where: matrix_index_top
-#        <<: *choc_switch
-#        params: { <<: *pcb_key_params, to: L_GP0 }
-#      # Home row: pinky → ring → middle → index
-#      - where: matrix_pinky_home
-#        <<: *choc_switch
-#        params: { <<: *pcb_key_params, to: L_GP26 }
-#      - where: matrix_ring_home
-#        <<: *choc_switch
-#        params: { <<: *pcb_key_params, to: L_GP27 }
-#      - where: matrix_middle_home
-#        <<: *choc_switch
-#        params: { <<: *pcb_key_params, to: L_GP28 }
-#      - where: matrix_index_home
-#        <<: *choc_switch
-#        params: { <<: *pcb_key_params, to: L_GP29 }
-#      # Bottom row: pinky → ring → middle → index
-#      - where: matrix_pinky_bottom
-#        <<: *choc_switch
-#        params: { <<: *pcb_key_params, to: L_GP12 }
-#      - where: matrix_ring_bottom
-#        <<: *choc_switch
-#        params: { <<: *pcb_key_params, to: L_GP13 }
-#      - where: matrix_middle_bottom
-#        <<: *choc_switch
-#        params: { <<: *pcb_key_params, to: L_GP14 }
-#      - where: matrix_index_bottom
-#        <<: *choc_switch
-#        params: { <<: *pcb_key_params, to: L_GP15 }
-#      # Thumb keys
-#      - where: matrix_thumb_home_bottom
-#        <<: *choc_switch
-#        params: { <<: *pcb_key_params, to: L_GP8 }
-#      - where: matrix_thumb_outer_bottom
-#        <<: *choc_switch
-#        params: { <<: *pcb_key_params, to: L_GP7 }
-#
-#      # Right board switches (13 keys) - ordered by row then column
-#      # Top row: pinky → ring → middle → index
-#      - where: mirror_matrix_pinky_home
-#        <<: *choc_switch
-#        params: &pcb_key_params_right
-#          <<: *pcb_key_params
-#          from: R_GND
-#          to: R_GP0
-#      - where: mirror_matrix_ring_top
-#        <<: *choc_switch
-#        params: { <<: *pcb_key_params_right, to: R_GP2 }
-#      - where: mirror_matrix_middle_top
-#        <<: *choc_switch
-#        params: { <<: *pcb_key_params_right, to: R_GP5 }
-#      - where: mirror_matrix_index_top
-#        <<: *choc_switch
-#        params: { <<: *pcb_key_params_right, to: R_GP8 }
-#      # Home row: pinky → ring → middle → index
-#      - where: mirror_matrix_ring_home
-#        <<: *choc_switch
-#        params: { <<: *pcb_key_params_right, to: R_GP3 }
-#      - where: mirror_matrix_middle_home
-#        <<: *choc_switch
-#        params: { <<: *pcb_key_params_right, to: R_GP6 }
-#      - where: mirror_matrix_index_home
-#        <<: *choc_switch
-#        params: { <<: *pcb_key_params_right, to: R_GP9 }
-#      # Bottom row: pinky → ring → middle → index
-#      - where: mirror_matrix_pinky_bottom
-#        <<: *choc_switch
-#        params: { <<: *pcb_key_params_right, to: R_GP1 }
-#      - where: mirror_matrix_ring_bottom
-#        <<: *choc_switch
-#        params: { <<: *pcb_key_params_right, to: R_GP4 }
-#      - where: mirror_matrix_middle_bottom
-#        <<: *choc_switch
-#        params: { <<: *pcb_key_params_right, to: R_GP7 }
-#      - where: mirror_matrix_index_bottom
-#        <<: *choc_switch
-#        params: { <<: *pcb_key_params_right, to: R_GP13 }
-#      # Thumb keys
-#      - where: mirror_matrix_thumb_home_bottom
-#        <<: *choc_switch
-#        params: { <<: *pcb_key_params_right, to: R_GP12 }
-#      - where: mirror_matrix_thumb_outer_bottom
-#        <<: *choc_switch
-#        params: { <<: *pcb_key_params_right, to: R_GP14 }
-#
-#      # Left TRRS jack
-#      - what: trrs
-#        where:
-#          ref: board_component_trrs
-#          shift: [ 0, 3 ]
-#          rotate: -90
-#        params:
-#          side: "F"
-#          symmetric: false
-#          TP: L_TP
-#          R1: L_R1
-#          R2: L_R2
-#          SL: L_SL
-#
-#      # Right TRRS jack
-#      - what: trrs
-#        where:
-#          ref: mirror_board_component_trrs
-#          shift: [ 0, 3 ]
-#          rotate: -90
-#        params:
-#          side: "F"
-#          symmetric: false
-#          TP: R_TP
-#          R1: R_R1
-#          R2: R_R2
-#          SL: R_SL
-#      # Left MCU with L_ prefixed nets
-#      - what: rp2040
-#        params:
-#          side: "B"
-#          P5V: L_P5V
-#          GND: L_GND
-#          P3V3: L_P3V3
-#          GP0: L_GP0
-#          GP1: L_GP1
-#          GP2: L_GP2
-#          GP3: L_GP3
-#          GP4: L_GP4
-#          GP5: L_GP5
-#          GP6: L_GP6
-#          GP7: L_GP7
-#          GP8: L_GP8
-#          GP9: L_GP9
-#          GP10: L_R1
-#          GP11: L_R2
-#          GP12: L_GP12
-#          GP13: L_GP13
-#          GP14: L_GP14
-#          GP15: L_GP15
-#          GP26: L_GP26
-#          GP27: L_GP27
-#          GP28: L_GP28
-#          GP29: L_GP29
-#        where:
-#          ref: board_component_mcu
-#          shift: [ -18 - mcu_offset, -mcu_offset ]
-#
-#      # Right MCU with R_ prefixed nets
-#      - what: rp2040
-#        params:
-#          side: "B"
-#          reverse: false
-#          P5V: R_P5V
-#          GND: R_GND
-#          P3V3: R_P3V3
-#          GP0: R_GP0
-#          GP1: R_GP1
-#          GP2: R_GP2
-#          GP3: R_GP3
-#          GP4: R_GP4
-#          GP5: R_GP5
-#          GP6: R_GP6
-#          GP7: R_GP7
-#          GP8: R_GP8
-#          GP9: R_GP9
-#          GP10: R_R1
-#          GP11: R_R2
-#          GP12: R_GP12
-#          GP13: R_GP13
-#          GP14: R_GP14
-#          GP15: R_GP15
-#          GP26: R_GP26
-#          GP27: R_GP27
-#          GP28: R_GP28
-#          GP29: R_GP29
-#        where:
-#          ref: mirror_board_component_mcu
-#          shift: [ mcu_offset, -mcu_offset ]
-#      - &npth_3mm
-#        what: npth
-#        params:
-#          hole_size: 3
-#          hole_drill: 3
-#        where: *hole_pinky_home_left
-#      - <<: *npth_3mm
-#        where: *hole_ring_top_left
-#      - <<: *npth_3mm
-#        where: *hole_ring_bottom_left
-#      - <<: *npth_3mm
-#        where: *hole_index_bottom_left
-#      - <<: *npth_3mm
-#        where: *hole_top_inner_left
-#      - <<: *npth_3mm
-#        where: *hole_thumb_home_bottom_left
-#      - <<: *npth_3mm
-#        where: *hole_pinky_home_right
-#      - <<: *npth_3mm
-#        where: *hole_pinky_bottom_right
-#      - <<: *npth_3mm
-#        where: *hole_ring_top_right
-#      - <<: *npth_3mm
-#        where: *hole_index_bottom_right
-#      - <<: *npth_3mm
-#        where: *hole_top_inner_right
-#      - <<: *npth_3mm
-#        where: *hole_thumb_home_bottom_right
+pcbs:
+  main:
+    outlines:
+      main:
+        outline: pcb
+    footprints:
+      # Left board switches (13 keys) - ordered by row then column
+      # Top row: pinky → ring → middle → index
+      - &choc_switch
+        where: matrix_ring_top
+        what: choc
+        params: &pcb_key_params
+          keycaps: true
+          hotswap: true
+          from: L_GND
+          to: L_GP2
+      - where: matrix_middle_top
+        <<: *choc_switch
+        params: { <<: *pcb_key_params, to: L_GP1 }
+      - where: matrix_index_top
+        <<: *choc_switch
+        params: { <<: *pcb_key_params, to: L_GP0 }
+      # Home row: pinky → ring → middle → index
+      - where: matrix_pinky_home
+        <<: *choc_switch
+        params: { <<: *pcb_key_params, to: L_GP26 }
+      - where: matrix_ring_home
+        <<: *choc_switch
+        params: { <<: *pcb_key_params, to: L_GP27 }
+      - where: matrix_middle_home
+        <<: *choc_switch
+        params: { <<: *pcb_key_params, to: L_GP28 }
+      - where: matrix_index_home
+        <<: *choc_switch
+        params: { <<: *pcb_key_params, to: L_GP29 }
+      # Bottom row: pinky → ring → middle → index
+      - where: matrix_pinky_bottom
+        <<: *choc_switch
+        params: { <<: *pcb_key_params, to: L_GP12 }
+      - where: matrix_ring_bottom
+        <<: *choc_switch
+        params: { <<: *pcb_key_params, to: L_GP13 }
+      - where: matrix_middle_bottom
+        <<: *choc_switch
+        params: { <<: *pcb_key_params, to: L_GP14 }
+      - where: matrix_index_bottom
+        <<: *choc_switch
+        params: { <<: *pcb_key_params, to: L_GP15 }
+      # Thumb keys
+      - where: matrix_thumb_home_bottom
+        <<: *choc_switch
+        params: { <<: *pcb_key_params, to: L_GP8 }
+      - where: matrix_thumb_outer_bottom
+        <<: *choc_switch
+        params: { <<: *pcb_key_params, to: L_GP7 }
+
+      # Right board switches (13 keys) - ordered by row then column
+      # Top row: pinky → ring → middle → index
+      - where: mirror_matrix_pinky_home
+        <<: *choc_switch
+        params: &pcb_key_params_right
+          <<: *pcb_key_params
+          from: R_GND
+          to: R_GP0
+      - where: mirror_matrix_ring_top
+        <<: *choc_switch
+        params: { <<: *pcb_key_params_right, to: R_GP2 }
+      - where: mirror_matrix_middle_top
+        <<: *choc_switch
+        params: { <<: *pcb_key_params_right, to: R_GP5 }
+      - where: mirror_matrix_index_top
+        <<: *choc_switch
+        params: { <<: *pcb_key_params_right, to: R_GP8 }
+      # Home row: pinky → ring → middle → index
+      - where: mirror_matrix_ring_home
+        <<: *choc_switch
+        params: { <<: *pcb_key_params_right, to: R_GP3 }
+      - where: mirror_matrix_middle_home
+        <<: *choc_switch
+        params: { <<: *pcb_key_params_right, to: R_GP6 }
+      - where: mirror_matrix_index_home
+        <<: *choc_switch
+        params: { <<: *pcb_key_params_right, to: R_GP9 }
+      # Bottom row: pinky → ring → middle → index
+      - where: mirror_matrix_pinky_bottom
+        <<: *choc_switch
+        params: { <<: *pcb_key_params_right, to: R_GP1 }
+      - where: mirror_matrix_ring_bottom
+        <<: *choc_switch
+        params: { <<: *pcb_key_params_right, to: R_GP4 }
+      - where: mirror_matrix_middle_bottom
+        <<: *choc_switch
+        params: { <<: *pcb_key_params_right, to: R_GP7 }
+      - where: mirror_matrix_index_bottom
+        <<: *choc_switch
+        params: { <<: *pcb_key_params_right, to: R_GP13 }
+      # Thumb keys
+      - where: mirror_matrix_thumb_home_bottom
+        <<: *choc_switch
+        params: { <<: *pcb_key_params_right, to: R_GP12 }
+      - where: mirror_matrix_thumb_outer_bottom
+        <<: *choc_switch
+        params: { <<: *pcb_key_params_right, to: R_GP14 }
+
+      # Left MCU with L_ prefixed nets
+      - what: rp2040
+        params:
+          side: "B"
+          reverse: false
+          P5V: L_P5V
+          GND: L_GND
+          P3V3: L_P3V3
+          GP0: L_GP0
+          GP1: L_GP1
+          GP2: L_GP2
+          GP4: L_DP
+          GP7: L_GP7
+          GP8: L_GP8
+          GP10: L_R1
+          GP11: L_R2
+          GP12: L_GP12
+          GP13: L_GP13
+          GP14: L_GP14
+          GP15: L_GP15
+          GP26: L_GP26
+          GP27: L_GP27
+          GP28: L_GP28
+          GP29: L_GP29
+        where:
+          ref: board_component_mcu
+          shift: [ -mcu_x + -mcu_offset + 0.25, mcu_y + mcu_offset ]
+#          shift: [ 0, 0 ]
+          rotate: -90
+
+      # Right MCU with R_ prefixed nets
+      - what: rp2040
+        params:
+          side: "B"
+          reverse: false
+          P5V: R_P5V
+          GND: R_GND
+          P3V3: R_P3V3
+          GP0: R_GP0
+          GP1: R_GP1
+          GP2: R_GP2
+          GP3: R_GP3
+          GP4: R_DP
+          GP5: R_GP5
+          GP6: R_GP6
+          GP7: R_GP7
+          GP8: R_GP8
+          GP9: R_GP9
+          GP10: R_R1
+          GP11: R_R2
+          GP12: R_GP12
+          GP13: R_GP13
+          GP14: R_GP14
+          GP15: R_GP15
+          GP26: R_GP26
+          GP27: R_GP27
+          GP28: R_GP28
+          GP29: R_GP29
+        where:
+          ref: mirror_board_component_mcu
+          shift: [ -mcu_x + -mcu_offset + 0.25, -mcu_offset ]
+          rotate: -90
+
+      # Left USB-C breakout
+      - what: usbc_breakout
+        params:
+          side: "B"
+          GND: L_GND
+          VBUS: L_P5V
+          CC1: L_CC1
+          CC2: L_CC2
+          DP: L_DP
+          DN: L_DN
+          SBU1: L_SBU1
+          SBU2: L_SBU2
+        where:
+          ref: board_component_usb
+          shift: [ -usb_breakout_x/2 + usb_breakout_offset_x, usb_breakout_y/2 ]
+          rotate: 90
+
+      # Right USB-C breakout
+      - what: usbc_breakout
+        params:
+          side: "B"
+          GND: R_GND
+          VBUS: R_P5V
+          CC1: R_CC1
+          CC2: R_CC2
+          DP: R_DP
+          DN: R_DN
+          SBU1: R_SBU1
+          SBU2: R_SBU2
+        where:
+          ref: mirror_board_component_usb
+          shift: [ -usb_breakout_x/2 + usb_breakout_offset_x, usb_breakout_y/2 ]
+          rotate: 90
+
+      - &npth_3mm
+        what: npth
+        params:
+          hole_size: 3
+          hole_drill: 3
+        where: *hole_pinky_home_left
+      - <<: *npth_3mm
+        where: *hole_ring_top_left
+      - <<: *npth_3mm
+        where: *hole_ring_bottom_left
+      - <<: *npth_3mm
+        where: *hole_index_bottom_left
+      - <<: *npth_3mm
+        where: *hole_top_inner_left
+      - <<: *npth_3mm
+        where: *hole_thumb_home_bottom_left
+      - <<: *npth_3mm
+        where: *hole_pinky_home_right
+      - <<: *npth_3mm
+        where: *hole_pinky_bottom_right
+      - <<: *npth_3mm
+        where: *hole_ring_top_right
+      - <<: *npth_3mm
+        where: *hole_index_bottom_right
+      - <<: *npth_3mm
+        where: *hole_top_inner_right
+      - <<: *npth_3mm
+        where: *hole_thumb_home_bottom_right
