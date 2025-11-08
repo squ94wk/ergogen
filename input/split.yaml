@@ -259,11 +259,25 @@ outlines:
     - <<: *m25_hole
       where: &hole_top_inner_left
         ref: matrix_index_top
-        shift: [13, 6]
+        shift: [15.5, 6]
+    - &m2_hole
+      what: circle
+      radius: 1.7/2
+      where: &hole_mcu_cover_top_left
+        ref: board_component_mcu
+        shift: [-2, mcu_y + 4]
+    - <<: *m2_hole
+      where: &hole_mcu_cover_middle_left
+        ref: board_component_usb
+        shift: [-2.5 + usb_breakout_offset_x, usb_breakout_y - 2.5]
+    - <<: *m2_hole
+      where: &hole_mcu_cover_bottom_left
+        ref: board_component_usb
+        shift: [-2.5 + usb_breakout_offset_x, 2.5]
     - <<: *m25_hole
       where: &hole_thumb_home_bottom_left
-        ref: matrix_thumb_home_bottom
-        shift: [-3.5, 15]
+        ref: matrix_index_bottom
+        shift: [15.5, -5]
     # right side
     - <<: *m25_hole
       where: &hole_pinky_home_right
@@ -284,11 +298,23 @@ outlines:
     - <<: *m25_hole
       where: &hole_top_inner_right
         ref: mirror_matrix_index_top
-        shift: [13, 6]
+        shift: [15.5, 6]
+    - <<: *m2_hole
+      where: &hole_mcu_cover_top_right
+        ref: mirror_board_component_mcu
+        shift: [-2, mcu_y + 4]
+    - <<: *m2_hole
+      where: &hole_mcu_cover_middle_right
+        ref: mirror_board_component_usb
+        shift: [-2.5 + usb_breakout_offset_x, usb_breakout_y - 2.5]
+    - <<: *m2_hole
+      where: &hole_mcu_cover_bottom_right
+        ref: mirror_board_component_usb
+        shift: [-2.5 + usb_breakout_offset_x, 2.5]
     - <<: *m25_hole
       where: &hole_thumb_home_bottom_right
-        ref: mirror_matrix_thumb_home_bottom
-        shift: [-3.5, 15]
+        ref: mirror_matrix_index_bottom
+        shift: [15.5, -5]
 
   _through_holes:
     - name: _holes
@@ -315,7 +341,7 @@ outlines:
         - ref: board_component_usb
           shift: [usb_breakout_offset_x + usb_plate_inlet, usb_breakout_y]
         - ref: board_component_mcu
-          shift: [0 + usb_plate_inlet, mcu_y]
+          shift: [0 - 4, mcu_y + 2]
         - <<: *hole_top_inner_left
     - &board_back_fill_right_poly
       what: polygon
@@ -331,9 +357,10 @@ outlines:
         - ref: mirror_board_component_usb
           shift: [usb_breakout_offset_x + usb_plate_inlet, usb_breakout_y]
         - ref: mirror_board_component_mcu
-          shift: [0 + usb_plate_inlet, mcu_y]
+          shift: [0 - 4, mcu_y + 2]
         - <<: *hole_top_inner_right
       expand: 8
+      fillet: 4
     - operation: subtract
       name: _holes
 
@@ -356,6 +383,7 @@ outlines:
       what: polygon
       points:
         - <<: *hole_top_inner_left
+          shift: [13, 6]
         - ref: matrix_index_home
           shift: [0, 14]
         - ref: matrix_index_top
@@ -364,6 +392,7 @@ outlines:
       what: polygon
       points:
         - <<: *hole_top_inner_right
+          shift: [13, 6]
         - ref: mirror_matrix_index_home
           shift: [0, 14]
         - ref: mirror_matrix_index_top
@@ -420,6 +449,29 @@ outlines:
     - operation: stack
       name: _screws
 
+  mcu_cover:
+    - &mcu_cover_left_poly
+      what: polygon
+      points:
+        - <<: *hole_top_inner_left
+        - <<: *hole_thumb_home_bottom_left
+        - <<: *hole_mcu_cover_bottom_left
+          shift: [-2.5 + usb_breakout_offset_x, 2.5 - 5]
+        - <<: *hole_mcu_cover_middle_left
+          shift: [-2.5 + usb_breakout_offset_x, usb_breakout_y]
+        - <<: *hole_mcu_cover_top_left
+    - &mcu_cover_right_poly
+      what: polygon
+      points:
+        - <<: *hole_top_inner_right
+        - <<: *hole_thumb_home_bottom_right
+        - <<: *hole_mcu_cover_bottom_right
+          shift: [-2.5 + usb_breakout_offset_x, 2.5 - 5]
+        - <<: *hole_mcu_cover_middle_right
+          shift: [-2.5 + usb_breakout_offset_x, usb_breakout_y]
+        - <<: *hole_mcu_cover_top_right
+      expand: 3
+
   full:
     - name: bottom_plate
     - name: keys
@@ -427,6 +479,10 @@ outlines:
     - name: _key_cutouts
       operation: stack
     - name: board
+      operation: stack
+    - name: _screws
+      operation: stack
+    - name: mcu_cover
       operation: stack
 #    - name: cover_plate
 #      operation: stack
